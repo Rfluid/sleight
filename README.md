@@ -9,10 +9,10 @@ Your fiber application entry point should be something like
 package main
 
 import (
-	user "github.com/Rfluid/go-api/src/module/user/controller"
+	user "github.com/Rfluid/go-api/src/module/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-    "github.com/Rfluid/fiber-module-controller"
+    "github.com/Rfluid/fiber-modules"
 )
 
 func main() {
@@ -20,9 +20,10 @@ func main() {
 
 	app.Use(logger.New())
 
-	fiber_module.RegisterControllers().SetPrefix("/api").Bootstrap(
+	fiber_modules.RegisterModules().Prefix("/api").Modules(
+        user.UserModule
+    ).Bootstrap(
         app,
-        user.UserModule,
     )
 
 	app.Listen(":3000")

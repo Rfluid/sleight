@@ -1,4 +1,4 @@
-package fiber_module
+package fiber_modules
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -8,32 +8,39 @@ var App *fiber.App
 
 type Module func() []func()
 
-type Controllers struct {
-	prefix string
+type Modules struct {
+	prefix  string
+	modules []Module
 }
 
-func (controllers *Controllers) SetPrefix(
+func (modules *Modules) Prefix(
 	prefix string,
-) *Controllers {
-	controllers.prefix = prefix
-	return controllers
+) *Modules {
+	modules.prefix = prefix
+	return modules
 }
 
-func (controllers *Controllers) Bootstrap(
+func (modules *Modules) Modules(
+	modulesToBootstrap ...Module,
+) *Modules {
+	modules.modules = modulesToBootstrap
+	return modules
+}
+
+func (modules *Modules) Bootstrap(
 	baseApp *fiber.App,
-	modules ...Module,
 ) {
 	App = fiber.New()
-	baseApp.Mount(controllers.prefix, App)
+	baseApp.Mount(modules.prefix, App)
 
-	for _, module := range modules {
+	for _, module := range modules.modules {
 		for _, controller := range module() {
 			controller()
 		}
 	}
 }
 
-func RegisterControllers() *Controllers {
-	controllers := Controllers{prefix: ""}
-	return &controllers
+func RegisterModules() *Modules {
+	modules := Modules{prefix: "", modules: []Module{}}
+	return &modules
 }

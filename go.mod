@@ -1,4 +1,4 @@
-module github.com/Rfluid/fiber-module-controller
+module github.com/Rfluid/fiber-modules
 
 go 1.21.0
 

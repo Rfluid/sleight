@@ -20,7 +20,7 @@ func main() {
 
 	app.Use(logger.New())
 
-	RegisterControllers().SetPrefix("/api").Bootstrap(
+	fiber_module.RegisterControllers().SetPrefix("/api").Bootstrap(
         app,
         user.UserModule,
     )

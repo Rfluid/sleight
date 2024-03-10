@@ -1,4 +1,4 @@
-package main
+package fiber_module
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -12,8 +12,11 @@ type Controllers struct {
 	prefix string
 }
 
-func (controllers *Controllers) SetPrefix(prefix string) {
+func (controllers *Controllers) SetPrefix(
+	prefix string,
+) *Controllers {
 	controllers.prefix = prefix
+	return controllers
 }
 
 func (controllers *Controllers) Bootstrap(

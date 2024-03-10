@@ -21,7 +21,7 @@ func main() {
 	app.Use(logger.New())
 
 	fiber_modules.RegisterModules().Prefix("/api").Modules(
-        user.UserModule
+        user_module.Main
     ).Bootstrap(
         app,
     )
@@ -31,17 +31,19 @@ func main() {
 ```
 Your user.controller.go something like
 ``` 
-func UserController() {
-    controller := GenerateController("/user")
+package user_controller
+
+func Main() {
+    controller := fiber_modules.GenerateController("/user")
 
     controller.Get("/me", someFunc)
 }
 ```
 And your user.module.go
 ```
-func UserModule() {
-    return [
-        UserController,
-    ]
+package user_module
+
+func Main() {
+    user_controller.Main()
 }
 ```

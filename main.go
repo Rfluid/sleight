@@ -6,7 +6,7 @@ import (
 
 var App *fiber.App
 
-type Module func() []func()
+type Module func()
 
 type Modules struct {
 	prefix  string
@@ -34,9 +34,7 @@ func (modules *Modules) Bootstrap(
 	baseApp.Mount(modules.prefix, App)
 
 	for _, module := range modules.modules {
-		for _, controller := range module() {
-			controller()
-		}
+		module()
 	}
 }
 

@@ -20,6 +20,7 @@ func (c *Controller) SetBootstrap(
 	bootstrap ControllerBootstrap,
 ) Controller {
 	c.bootstrap = func() {
+		App.Mount(c.prefix, c.App)
 		bootstrap()
 		defer ControllerBsWg.Done()
 	}
@@ -30,7 +31,6 @@ func GenerateController(
 	prefix string,
 ) Controller {
 	fiberApp := fiber.New()
-	App.Mount(prefix, fiberApp)
 
 	controller := Controller{
 		prefix:    prefix,

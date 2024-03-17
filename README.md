@@ -1,6 +1,6 @@
 # About
 
-Package to improve module/controller generation in fiber.
+Tools to organize your fiber app with module/controller declarations featuring out of the box multithread.
 
 # Example
 
@@ -20,11 +20,14 @@ func main() {
 
 	app.Use(logger.New())
 
-	fiber_modules.RegisterModules().Prefix("/api").Modules(
-        user_module.Main
-    ).Bootstrap(
-        app,
-    )
+	sleight
+        .RegisterModules()
+        .Prefix("/api").
+        Modules(
+            user_module.Main
+        ).Bootstrap(
+            app,
+        )
 
 	app.Listen(":3000")
 }
@@ -34,7 +37,7 @@ Your user.controller.go something like
 package user_controller
 
 func Main() {
-    controller := fiber_modules.GenerateController("/user")
+    controller := sleight.GenerateController("/user")
 
     controller.Get("/me", someFunc)
 }
@@ -44,6 +47,6 @@ And your user.module.go
 package user_module
 
 func Main() {
-    user_controller.Main()
+    GenerateController
 }
 ```

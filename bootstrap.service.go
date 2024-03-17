@@ -1,4 +1,4 @@
-package fiber_modules
+package sleight
 
 import (
 	"sync"
@@ -6,11 +6,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type ModuleBootstrap func()
-
 type Modules struct {
 	prefix  string
-	modules []ModuleBootstrap
+	modules []Module
+}
+
+func Register() *Modules {
+	modules := Modules{prefix: "", modules: []Module{}}
+	return &modules
 }
 
 func (modules *Modules) Prefix(
@@ -21,7 +24,7 @@ func (modules *Modules) Prefix(
 }
 
 func (modules *Modules) Modules(
-	modulesToBootstrap ...ModuleBootstrap,
+	modulesToBootstrap ...Module,
 ) *Modules {
 	modules.modules = modulesToBootstrap
 	return modules
@@ -38,17 +41,12 @@ func (modules *Modules) Bootstrap(
 	for _, module := range modules.modules {
 		modulesWg.Add(1)
 
-		go func(module ModuleBootstrap) {
-			module()
+		go func(module Module) {
+			module.Bootstrap()
 
 			defer modulesWg.Done()
 		}(module)
 	}
 
 	modulesWg.Wait()
-}
-
-func RegisterModules() *Modules {
-	modules := Modules{prefix: "", modules: []ModuleBootstrap{}}
-	return &modules
 }

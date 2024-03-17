@@ -1,4 +1,4 @@
-package fiber_modules
+package sleight
 
 import (
 	"github.com/gofiber/fiber/v2"

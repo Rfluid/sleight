@@ -16,20 +16,25 @@ type Controller struct {
 	*fiber.App
 }
 
+func (c *Controller) SetBootstrap(
+	bootstrap ControllerBootstrap,
+) {
+	c.bootstrap = func() {
+		bootstrap()
+		defer ControllerBsWg.Done()
+	}
+}
+
 func GenerateController(
 	prefix string,
-	bootstrap func(),
 ) Controller {
 	fiberApp := fiber.New()
 	App.Mount(prefix, fiberApp)
 
 	controller := Controller{
-		prefix: prefix,
-		bootstrap: func() {
-			bootstrap()
-			defer ControllerBsWg.Done()
-		},
-		App: fiberApp,
+		prefix:    prefix,
+		bootstrap: func() {},
+		App:       fiberApp,
 	}
 
 	return controller

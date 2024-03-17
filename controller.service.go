@@ -18,11 +18,12 @@ type Controller struct {
 
 func (c *Controller) SetBootstrap(
 	bootstrap ControllerBootstrap,
-) {
+) Controller {
 	c.bootstrap = func() {
 		bootstrap()
 		defer ControllerBsWg.Done()
 	}
+	return *c
 }
 
 func GenerateController(

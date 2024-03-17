@@ -3,18 +3,18 @@ package sleight
 type ModuleBootstrap func()
 
 type Module struct {
-	controllers []Controller
+	Controllers []Controller
 }
 
 func (module *Module) SetControllers(
 	controllers ...Controller,
 ) *Module {
-	module.controllers = controllers
+	module.Controllers = controllers
 	return module
 }
 
 func (module *Module) Bootstrap() *Module {
-	for _, controller := range module.controllers {
+	for _, controller := range module.Controllers {
 		ControllerBsWg.Add(1)
 
 		go controller.bootstrap()

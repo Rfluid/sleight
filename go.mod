@@ -1,4 +1,4 @@
-module github.com/Rfluid/fiber-modules
+module github.com/Rfluid/sleight
 
 go 1.21.0
 

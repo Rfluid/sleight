@@ -13,14 +13,18 @@ type ControllerBootstrap = func()
 type Controller struct {
 	prefix    string
 	bootstrap ControllerBootstrap
-	*fiber.App
+	fiber.Router
+}
+
+func (c *Controller) setRouter() {
+	c.Router = App.Group(c.prefix)
 }
 
 func (c *Controller) SetBootstrap(
 	bootstrap ControllerBootstrap,
 ) Controller {
 	c.bootstrap = func() {
-		App.Mount(c.prefix, c.App)
+		c.setRouter()
 		bootstrap()
 		defer ControllerBsWg.Done()
 	}
@@ -30,12 +34,9 @@ func (c *Controller) SetBootstrap(
 func GenerateController(
 	prefix string,
 ) Controller {
-	fiberApp := fiber.New()
-
 	controller := Controller{
 		prefix:    prefix,
 		bootstrap: func() {},
-		App:       fiberApp,
 	}
 
 	return controller
